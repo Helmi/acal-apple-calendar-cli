@@ -114,9 +114,14 @@ jobs:
         run: |
           set -euo pipefail
           codesign --force --timestamp --options runtime \
+            --identifier com.helmi.acal \
+            --entitlements Support/acal.entitlements \
             --sign "$APPLE_SIGNING_IDENTITY" \
             dist/release/acal
           codesign --verify --verbose=2 dist/release/acal
+          SIGNATURE_INFO="$(codesign -dv dist/release/acal 2>&1)"
+          grep -q '^Identifier=com.helmi.acal$' <<< "$SIGNATURE_INFO"
+          grep -q '^Info.plist entries=' <<< "$SIGNATURE_INFO"
 
       - name: Resolve release tag/version
         id: resolve-release

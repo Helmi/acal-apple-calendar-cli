@@ -15,6 +15,24 @@ final class ACalTests: XCTestCase {
         XCTAssertEqual(ACalMachineErrorCode.eventKitFailure.mappedExitCode, .eventKitFailure)
     }
 
+    func testEmbeddedInfoPlistMatchesReleaseIdentity() throws {
+        let plistURL = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Support/Info.plist")
+        let data = try Data(contentsOf: plistURL)
+        let plist = try XCTUnwrap(
+            PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+        )
+
+        XCTAssertEqual(plist["CFBundleIdentifier"] as? String, "com.helmi.acal")
+        XCTAssertEqual(plist["CFBundleShortVersionString"] as? String, ACalBuildInfo.releaseVersion)
+        XCTAssertEqual(plist["CFBundleVersion"] as? String, ACalBuildInfo.releaseVersion)
+        XCTAssertNotNil(plist["NSCalendarsFullAccessUsageDescription"] as? String)
+        XCTAssertNotNil(plist["NSCalendarsUsageDescription"] as? String)
+    }
+
     func testEnvelopeIncludesSchemaVersion() throws {
         let payload = ["result": "ok"]
         let envelope = ACalEnvelope.success(payload, command: "test")
