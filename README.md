@@ -41,7 +41,7 @@ mint install Helmi/acal-apple-calendar-cli
 
 ### macOS installer (.pkg)
 
-Download the installer: **[acal-0.3.0-macos-universal.pkg](https://github.com/Helmi/acal-apple-calendar-cli/releases/download/v0.3.0/acal-0.3.0-macos-universal.pkg)**
+Download the installer: **[acal-0.4.0-macos-universal.pkg](https://github.com/Helmi/acal-apple-calendar-cli/releases/download/v0.4.0/acal-0.4.0-macos-universal.pkg)**
 
 Double-click to install. No terminal required. Works on both Apple Silicon and Intel Macs.
 
@@ -53,7 +53,7 @@ Download the latest `acal-<version>-macos-universal.zip` from [Releases](https:/
 
 ```bash
 curl -L -o acal.zip \
-  https://github.com/Helmi/acal-apple-calendar-cli/releases/download/v0.3.0/acal-0.3.0-macos-universal.zip
+  https://github.com/Helmi/acal-apple-calendar-cli/releases/download/v0.4.0/acal-0.4.0-macos-universal.zip
 unzip acal.zip
 chmod +x acal
 mv acal /usr/local/bin/acal
@@ -81,6 +81,17 @@ acal events create \
   --start "2026-03-16T09:00:00+01:00" \
   --end "2026-03-16T09:30:00+01:00"
 ```
+
+## Calendar permission
+
+`acal` has its own macOS privacy identity (`com.helmi.acal`). Run `acal auth grant` once, click "Allow" in the dialog for **acal**, and the permission applies to `acal` itself — no matter which process starts it: your terminal, AI agents, MCP clients like Claude Desktop, cron or launchd jobs. It survives reboots and `acal` updates.
+
+Before 0.4.0, macOS attributed access to the app that launched `acal` (for example Terminal), so a grant made in one terminal did not carry over to agents or MCP clients. After upgrading, run `acal auth grant` once more.
+
+Notes:
+
+- The grant is tied to the install location. If `acal` moves to a different path (for example a new versioned Homebrew folder after `brew upgrade`), macOS may ask once more.
+- Check the state with `acal auth status`. Manage or revoke it in System Settings → Privacy & Security → Calendars.
 
 ## Commands
 
@@ -123,7 +134,7 @@ All commands accept `--format json` for machine-readable output.
 
 4. **Restart Claude Desktop.** You should see a hammer icon in the chat input, showing acal's 10 calendar tools are available.
 
-5. **Grant calendar access.** The first time you ask Claude about your calendar, macOS will show a permission dialog. Click "Allow". Then restart Claude Desktop for the permission to take effect.
+5. **Grant calendar access.** Run `acal auth grant` once in a terminal and click "Allow" (or ask Claude about your calendar and allow the dialog for "acal"). The same grant covers the MCP server — see [Calendar permission](#calendar-permission).
 
 6. **Try it out.** Ask Claude something like:
 
@@ -213,6 +224,8 @@ cd acal-apple-calendar-cli
 swift build -c release
 swift test
 ```
+
+Local builds are ad-hoc signed, so macOS treats every rebuild as a new app and asks for Calendar access again. Release builds are signed with a Developer ID and keep the grant across updates.
 
 ## Contributing
 
