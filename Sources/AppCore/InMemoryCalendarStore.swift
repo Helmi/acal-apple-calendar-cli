@@ -150,14 +150,30 @@ public final class InMemoryCalendarStore: CalendarStore, @unchecked Sendable {
                 )
             }
 
-            if let title = input.title { event.title = title }
-            if let start = input.start { event.start = DateCodec.iso8601String(from: start) }
-            if let end = input.end { event.end = DateCodec.iso8601String(from: end) }
-            if let timezone = input.timezone { event.timezone = timezone.identifier }
-            if let allDay = input.allDay { event.allDay = allDay }
-            if let location = input.location { event.location = location }
-            if let notes = input.notes { event.notes = notes }
-            if let url = input.url { event.url = url.absoluteString }
+            if let title = input.title {
+                event.title = title
+            }
+            if let start = input.start {
+                event.start = DateCodec.iso8601String(from: start)
+            }
+            if let end = input.end {
+                event.end = DateCodec.iso8601String(from: end)
+            }
+            if let timezone = input.timezone {
+                event.timezone = timezone.identifier
+            }
+            if let allDay = input.allDay {
+                event.allDay = allDay
+            }
+            if let location = input.location {
+                event.location = location
+            }
+            if let notes = input.notes {
+                event.notes = notes
+            }
+            if let url = input.url {
+                event.url = url.absoluteString
+            }
 
             if input.clearRecurrence {
                 event.recurrence = nil
@@ -165,7 +181,9 @@ public final class InMemoryCalendarStore: CalendarStore, @unchecked Sendable {
                 event.recurrence = recurrence
             }
 
-            if let alarms = input.alarms { event.alarms = alarms }
+            if let alarms = input.alarms {
+                event.alarms = alarms
+            }
 
             if let start = occurrenceStart {
                 event.occurrenceStart = DateCodec.iso8601String(from: start)
