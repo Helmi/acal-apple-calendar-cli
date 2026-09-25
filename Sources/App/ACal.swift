@@ -35,6 +35,8 @@ struct ACal: AsyncParsableCommand {
     )
 
     static func main() async {
+        ResponsibilityDisclaim.reexecIfNeeded()
+
         do {
             var command = try parseAsRoot()
             if var asyncCommand = command as? AsyncParsableCommand {

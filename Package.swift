@@ -1,6 +1,14 @@
 // swift-tools-version: 6.2
 
+import Foundation
 import PackageDescription
+
+/// Embedding Info.plist gives the executable its own identity (com.helmi.acal) so macOS TCC
+/// attributes Calendar access to acal instead of whichever process launched it.
+let infoPlistPath = URL(fileURLWithPath: #filePath)
+    .deletingLastPathComponent()
+    .appendingPathComponent("Support/Info.plist")
+    .path
 
 let package = Package(
     name: "acal",
@@ -24,6 +32,14 @@ let package = Package(
                 "Diagnostics",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "MCP", package: "swift-sdk")
+            ],
+            linkerSettings: [
+                .unsafeFlags([
+                    "-Xlinker", "-sectcreate",
+                    "-Xlinker", "__TEXT",
+                    "-Xlinker", "__info_plist",
+                    "-Xlinker", infoPlistPath
+                ])
             ]
         ),
         .target(name: "AppCore"),

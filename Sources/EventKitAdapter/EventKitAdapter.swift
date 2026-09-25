@@ -309,14 +309,30 @@ public final class EventKitCalendarStore: CalendarStore, @unchecked Sendable {
                 )
             }
 
-            if let title = input.title { event.title = title }
-            if let start = input.start { event.startDate = start }
-            if let end = input.end { event.endDate = end }
-            if let timezone = input.timezone { event.timeZone = timezone }
-            if let allDay = input.allDay { event.isAllDay = allDay }
-            if let location = input.location { event.location = location }
-            if let notes = input.notes { event.notes = notes }
-            if let url = input.url { event.url = url }
+            if let title = input.title {
+                event.title = title
+            }
+            if let start = input.start {
+                event.startDate = start
+            }
+            if let end = input.end {
+                event.endDate = end
+            }
+            if let timezone = input.timezone {
+                event.timeZone = timezone
+            }
+            if let allDay = input.allDay {
+                event.isAllDay = allDay
+            }
+            if let location = input.location {
+                event.location = location
+            }
+            if let notes = input.notes {
+                event.notes = notes
+            }
+            if let url = input.url {
+                event.url = url
+            }
 
             if input.clearRecurrence {
                 event.recurrenceRules = nil
